@@ -17,3 +17,4 @@ SELECT `first-name` FROM `user-data`;
 ✔ Avoid using SQL Reserved Keywords as table or column names
 
 Reserved words like SELECT, ORDER, DATE should not be used as column names.
+## 5. use snake_case.
