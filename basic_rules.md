@@ -6,8 +6,8 @@
 ## 4. Table and Column Naming Rules
 ✔ Identifiers (table names, column names) should be meaningful
 
-Bad: t1, c1
-Good: employees, salary, join_date
+### Bad: t1, c1
+### Good: employees, salary, join_date
 ✔ Use backticks ( ) for special characters or reserved keywords
 
 sql
