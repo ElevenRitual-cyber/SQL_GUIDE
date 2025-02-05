@@ -69,7 +69,7 @@ Additional SQL operators used in queries.
 | `BETWEEN` | Checks if value is within a range | `Salary BETWEEN 30000 AND 50000` |
 | `IN` | Checks if value matches a set of values | `Department IN ('HR', 'IT', 'Sales')` |
 | `LIKE` | Searches for a pattern in a string | `Name LIKE 'A%'` (names starting with 'A') |
-| `IS NULL` | Checks for NULL values | `Address IS NULL` |
+| `NOT IN` | Checks IF values does not matches a set of values | `Address NOT IN` |
 
 | Operator  | Description                                  | Example Query |
 |-----------|----------------------------------------------|--------------|
