@@ -67,3 +67,29 @@ In this example:
 
 This command will create `new_table` with the same column definitions and indexes as `existing_table`, but without any data.
 
+# 4.  Why this query will not work?
+select name from Customer where referee_id !=2 or referee_id = null;  
+Your SQL query has a **logical mistake** in the condition `referee_id = null`.  
+
+### **Issues in Your Query:**
+1. **Incorrect NULL check**:  
+   - In SQL, `= NULL` does **not** work because `NULL` is **not a value**, but rather a placeholder for missing data.  
+   - Instead, use `IS NULL` to check for `NULL` values.
+
+2. **Logical issue with `!= 2 OR referee_id = NULL`**:  
+   - The condition `referee_id != 2` will **not** include `NULL` values, because any comparison with `NULL` results in `UNKNOWN`.
+   - The correct way to include `NULL` values is by using `IS NULL`.
+
+---
+
+### **Corrected Query**
+```sql
+SELECT name FROM Customer WHERE referee_id != 2 OR referee_id IS NULL;
+```
+
+### **Fixes:**
+✅ **Replaced** `referee_id = NULL` with `referee_id IS NULL`.  
+✅ **Keeps records** where `referee_id` is either **not 2** or **NULL**.  
+
+Let me know if you need further clarification! 🚀
+
