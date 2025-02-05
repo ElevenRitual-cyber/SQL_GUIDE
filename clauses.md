@@ -1,6 +1,6 @@
 ### 1.**What is Pagination in SQL?** (LIMIT Clause)
 Pagination is a technique used to divide a large dataset into smaller, manageable chunks (pages). It is commonly used in applications where users browse records, such as **product listings, search results, or user profiles**.
-
+## Note : LIMIT clause is always used at the end of the query before the semincolon;
 ---
 
 ### **How Does Pagination Work in SQL?**
