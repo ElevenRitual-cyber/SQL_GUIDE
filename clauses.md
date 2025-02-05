@@ -195,3 +195,100 @@ SELECT * FROM Employees ORDER BY Salary DESC LIMIT 3;
 ✔ Use `DESC` for **descending order**.  
 ✔ Supports **multiple columns** for advanced sorting.  
 ✔ Works well with `LIMIT` for **pagination**.  
+### **What is `DISTINCT` in SQL?**  
+The `DISTINCT` keyword is used in SQL to **remove duplicate values** from a result set and return only **unique** values.
+
+---
+
+### 3.**Where is `DISTINCT` Used?**  
+`DISTINCT` is commonly used in:
+1. **Fetching unique values from a column**
+2. **Avoiding duplicate records**
+3. **Getting unique combinations of multiple columns**
+
+---
+
+### **Syntax**
+```sql
+SELECT DISTINCT column_name FROM table_name;
+```
+or  
+```sql
+SELECT DISTINCT column1, column2 FROM table_name;
+```
+
+---
+
+### **Example 1: Fetching Unique Values**
+#### **Table: Employees**
+```
++----+----------+------------+
+| ID | Name     | Department |
++----+----------+------------+
+| 1  | Alice    | HR         |
+| 2  | Bob      | IT         |
+| 3  | Charlie  | HR         |
+| 4  | David    | IT         |
+| 5  | Eve      | HR         |
++----+----------+------------+
+```
+#### **Get Unique Departments**
+```sql
+SELECT DISTINCT Department FROM Employees;
+```
+**Output:**
+```
++------------+
+| Department |
++------------+
+| HR         |
+| IT         |
++------------+
+```
+🔹 Here, duplicate `HR` and `IT` values are removed.
+
+---
+
+### **Example 2: Fetching Unique Combinations**
+If you apply `DISTINCT` on **multiple columns**, it returns **unique row combinations**.
+
+```sql
+SELECT DISTINCT Name, Department FROM Employees;
+```
+**Output:**
+```
++----------+------------+
+| Name     | Department |
++----------+------------+
+| Alice    | HR         |
+| Bob      | IT         |
+| Charlie  | HR         |
+| David    | IT         |
+| Eve      | HR         |
++----------+------------+
+```
+Since all **name-department** pairs are unique, it returns all rows.
+
+---
+
+### **Example 3: Using `DISTINCT` with `COUNT`**
+If you want to count unique values:
+```sql
+SELECT COUNT(DISTINCT Department) FROM Employees;
+```
+**Output:**
+```
++------------------------+
+| COUNT(DISTINCT Department) |
++------------------------+
+| 2                      |
++------------------------+
+```
+
+---
+
+### **Key Takeaways**
+✔ `DISTINCT` removes **duplicates** from a result set.  
+✔ Works with **single or multiple columns**.  
+✔ Can be used with **aggregate functions** like `COUNT()`.  
+✔ **Does not modify the actual table**, just affects query results.  
