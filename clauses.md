@@ -292,3 +292,180 @@ SELECT COUNT(DISTINCT Department) FROM Employees;
 ✔ Works with **single or multiple columns**.  
 ✔ Can be used with **aggregate functions** like `COUNT()`.  
 ✔ **Does not modify the actual table**, just affects query results.  
+# 4. ### **GROUP BY and HAVING Clauses in SQL**
+
+#### **1. GROUP BY Clause**
+The `GROUP BY` clause in SQL is used to group rows that have the same values in specified columns into summary rows. It is often used with aggregate functions (`COUNT`, `SUM`, `AVG`, `MAX`, `MIN`, etc.) to perform calculations on each group.
+
+**Syntax:**
+```sql
+SELECT column_name, aggregate_function(column_name)
+FROM table_name
+GROUP BY column_name;
+```
+
+**Example:**
+Suppose we have a `Sales` table:
+
+| OrderID | Product | Category   | Amount |
+|---------|---------|-----------|--------|
+| 1       | Laptop  | Electronics | 1000   |
+| 2       | Phone   | Electronics | 500    |
+| 3       | Shirt   | Clothing   | 200    |
+| 4       | Laptop  | Electronics | 1200   |
+| 5       | Shirt   | Clothing   | 300    |
+
+To find the total sales amount for each category:
+```sql
+SELECT Category, SUM(Amount) AS TotalSales
+FROM Sales
+GROUP BY Category;
+```
+
+**Output:**
+| Category   | TotalSales |
+|-----------|------------|
+| Electronics | 2700       |
+| Clothing    | 500        |
+
+---
+
+#### **2. HAVING Clause**
+The `HAVING` clause is used to filter groups after they have been created by `GROUP BY`. Unlike `WHERE`, which filters individual rows before aggregation, `HAVING` filters groups after aggregation.
+
+**Syntax:**
+```sql
+SELECT column_name, aggregate_function(column_name)
+FROM table_name
+GROUP BY column_name
+HAVING condition;
+```
+
+**Example:**
+To find only those categories where total sales exceed 1000:
+```sql
+SELECT Category, SUM(Amount) AS TotalSales
+FROM Sales
+GROUP BY Category
+HAVING SUM(Amount) > 1000;
+```
+
+**Output:**
+| Category   | TotalSales |
+|-----------|------------|
+| Electronics | 2700       |
+
+---
+
+### **Key Differences: GROUP BY vs HAVING**
+| Feature     | GROUP BY | HAVING |
+|------------|---------|--------|
+| Purpose    | Groups rows based on column values | Filters groups after aggregation |
+| Used With  | Aggregate functions & non-aggregated columns | Aggregate functions |
+| Execution  | Happens before HAVING | Applied after GROUP BY |
+| Can Use WHERE? | Yes, before GROUP BY | No, only after GROUP BY |
+
+---
+
+### **Example Combining WHERE, GROUP BY, and HAVING**
+```sql
+SELECT Category, COUNT(*) AS ProductCount, SUM(Amount) AS TotalSales
+FROM Sales
+WHERE Amount > 200  -- Filters before grouping
+GROUP BY Category
+HAVING SUM(Amount) > 1000; -- Filters after grouping
+```
+This query:
+1. Filters out rows where `Amount ≤ 200` (using `WHERE`).
+2. Groups remaining rows by `Category`.
+3. Filters groups where total sales exceed `1000` (using `HAVING`).
+
+   
+# **4.GROUP BY and HAVING Clauses in SQL**
+
+#### **1. GROUP BY Clause**
+The `GROUP BY` clause in SQL is used to group rows that have the same values in specified columns into summary rows. It is often used with aggregate functions (`COUNT`, `SUM`, `AVG`, `MAX`, `MIN`, etc.) to perform calculations on each group.
+
+**Syntax:**
+```sql
+SELECT column_name, aggregate_function(column_name)
+FROM table_name
+GROUP BY column_name;
+```
+
+**Example:**
+Suppose we have a `Sales` table:
+
+| OrderID | Product | Category   | Amount |
+|---------|---------|-----------|--------|
+| 1       | Laptop  | Electronics | 1000   |
+| 2       | Phone   | Electronics | 500    |
+| 3       | Shirt   | Clothing   | 200    |
+| 4       | Laptop  | Electronics | 1200   |
+| 5       | Shirt   | Clothing   | 300    |
+
+To find the total sales amount for each category:
+```sql
+SELECT Category, SUM(Amount) AS TotalSales
+FROM Sales
+GROUP BY Category;
+```
+
+**Output:**
+| Category   | TotalSales |
+|-----------|------------|
+| Electronics | 2700       |
+| Clothing    | 500        |
+
+---
+
+#### **2. HAVING Clause**
+The `HAVING` clause is used to filter groups after they have been created by `GROUP BY`. Unlike `WHERE`, which filters individual rows before aggregation, `HAVING` filters groups after aggregation.
+
+**Syntax:**
+```sql
+SELECT column_name, aggregate_function(column_name)
+FROM table_name
+GROUP BY column_name
+HAVING condition;
+```
+
+**Example:**
+To find only those categories where total sales exceed 1000:
+```sql
+SELECT Category, SUM(Amount) AS TotalSales
+FROM Sales
+GROUP BY Category
+HAVING SUM(Amount) > 1000;
+```
+
+**Output:**
+| Category   | TotalSales |
+|-----------|------------|
+| Electronics | 2700       |
+
+---
+
+### **Key Differences: GROUP BY vs HAVING**
+| Feature     | GROUP BY | HAVING |
+|------------|---------|--------|
+| Purpose    | Groups rows based on column values | Filters groups after aggregation |
+| Used With  | Aggregate functions & non-aggregated columns | Aggregate functions |
+| Execution  | Happens before HAVING | Applied after GROUP BY |
+| Can Use WHERE? | Yes, before GROUP BY | No, only after GROUP BY |
+
+---
+
+### **Example Combining WHERE, GROUP BY, and HAVING**
+```sql
+SELECT Category, COUNT(*) AS ProductCount, SUM(Amount) AS TotalSales
+FROM Sales
+WHERE Amount > 200  -- Filters before grouping
+GROUP BY Category
+HAVING SUM(Amount) > 1000; -- Filters after grouping
+```
+This query:
+1. Filters out rows where `Amount ≤ 200` (using `WHERE`).
+2. Groups remaining rows by `Category`.
+3. Filters groups where total sales exceed `1000` (using `HAVING`).
+
