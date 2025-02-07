@@ -567,3 +567,95 @@ FROM Employees;
 ✅ It can be used in `SELECT`, `WHERE`, `ORDER BY`, and even aggregate functions.  
 ✅ Always use `END` to close the `CASE` statement.  
 ✅ The `ELSE` part is optional but recommended to avoid `NULL` values.
+
+# 6. **COALESCE in SQL**
+The `COALESCE` function returns the **first non-NULL** value from a list of expressions. It is commonly used to handle `NULL` values in queries.
+
+---
+
+### **Syntax**
+```sql
+COALESCE(value1, value2, ..., valueN)
+```
+- Evaluates expressions **from left to right**.
+- Returns the **first non-NULL** value it encounters.
+- If all values are `NULL`, it returns `NULL`.
+
+---
+
+### **Can COALESCE Take Multiple Values?**
+Yes! `COALESCE` can take multiple values. It evaluates them **in order** and returns the first non-NULL value.
+
+---
+
+### **Example 1: Handling NULL Values in a Contact List**
+#### **Scenario:** You have a `Customers` table with `PhoneNumber`, `Email`, and `Address`. Some values may be `NULL`.
+
+| CustomerID | Name  | PhoneNumber | Email         | Address      |
+|------------|------|------------|--------------|-------------|
+| 1          | John  | NULL       | john@mail.com | NULL        |
+| 2          | Alice | 9876543210 | NULL         | NULL        |
+| 3          | Bob   | NULL       | NULL         | No Address  |
+| 4          | Eve   | NULL       | NULL         | NULL        |
+
+#### **Query: Return the first available contact method**
+```sql
+SELECT 
+    Name,
+    COALESCE(PhoneNumber, Email, Address, 'No Contact Available') AS ContactInfo
+FROM Customers;
+```
+
+#### **Evaluation Order for Each Row:**
+- **John**: `PhoneNumber` is `NULL`, so it checks `Email` → **returns "john@mail.com"**.
+- **Alice**: `PhoneNumber` is not `NULL` → **returns "9876543210"**.
+- **Bob**: `PhoneNumber` and `Email` are `NULL`, but `Address` is not → **returns "No Address"**.
+- **Eve**: All fields are `NULL`, so it returns the default → **"No Contact Available"**.
+
+#### **Output:**
+| Name  | ContactInfo       |
+|------|------------------|
+| John  | john@mail.com   |
+| Alice | 9876543210      |
+| Bob   | No Address      |
+| Eve   | No Contact Available |
+
+---
+
+### **Example 2: Handling Discounts in a Products Table**
+| ProductID | Name  | SpecialDiscount | RegularDiscount | DefaultDiscount |
+|-----------|------|----------------|----------------|----------------|
+| 1         | Laptop  | NULL          | 10             | 5              |
+| 2         | Phone   | 15            | NULL           | 5              |
+| 3         | Tablet  | NULL          | NULL           | 5              |
+| 4         | Headset | NULL          | NULL           | NULL           |
+
+#### **Query: Get the First Available Discount**
+```sql
+SELECT 
+    Name,
+    COALESCE(SpecialDiscount, RegularDiscount, DefaultDiscount, 0) AS FinalDiscount
+FROM Products;
+```
+
+#### **Evaluation Order for Each Row:**
+1. **Laptop**: `SpecialDiscount` is `NULL`, so it checks `RegularDiscount` → **returns 10**.
+2. **Phone**: `SpecialDiscount` is 15 (not `NULL`) → **returns 15**.
+3. **Tablet**: Both `SpecialDiscount` and `RegularDiscount` are `NULL`, so it checks `DefaultDiscount` → **returns 5**.
+4. **Headset**: All values are `NULL`, so it returns the default **0**.
+
+#### **Output:**
+| Name    | FinalDiscount |
+|---------|--------------|
+| Laptop  | 10           |
+| Phone   | 15           |
+| Tablet  | 5            |
+| Headset | 0            |
+
+---
+
+### **Key Takeaways**
+✅ **COALESCE takes multiple values** and returns the **first non-NULL** value.  
+✅ Evaluates **left to right** and stops once it finds a non-NULL value.  
+✅ If **all values are NULL**, it returns `NULL` (or a default value if provided).  
+✅ Works in `SELECT`, `WHERE`, `ORDER BY`, and other SQL clauses.
