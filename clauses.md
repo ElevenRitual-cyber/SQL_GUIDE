@@ -469,3 +469,101 @@ This query:
 2. Groups remaining rows by `Category`.
 3. Filters groups where total sales exceed `1000` (using `HAVING`).
 
+## 5. **CASE WHEN THEN in SQL**
+The `CASE` statement in SQL is used to implement conditional logic within queries. It works like an `IF-ELSE` statement in programming, allowing you to return different values based on specified conditions.
+
+---
+
+### **Syntax**
+```sql
+SELECT 
+    column_name,
+    CASE 
+        WHEN condition1 THEN result1
+        WHEN condition2 THEN result2
+        ELSE default_result
+    END AS alias_name
+FROM table_name;
+```
+- `WHEN condition THEN result`: If the condition is met, the corresponding result is returned.
+- `ELSE default_result`: If no conditions are met, the default value is returned.
+- `END AS alias_name`: Assigns a name to the computed column.
+
+---
+
+### **Example 1: Categorizing Data**
+#### **Scenario:** You have an `Employees` table.
+
+| EmployeeID | Name  | Salary |
+|------------|------|--------|
+| 1          | John  | 5000   |
+| 2          | Alice | 8000   |
+| 3          | Bob   | 12000  |
+| 4          | Eve   | 3000   |
+
+#### **Query: Classify employees based on salary**
+```sql
+SELECT 
+    Name, 
+    Salary,
+    CASE 
+        WHEN Salary < 5000 THEN 'Low'
+        WHEN Salary BETWEEN 5000 AND 10000 THEN 'Medium'
+        ELSE 'High'
+    END AS SalaryCategory
+FROM Employees;
+```
+
+#### **Output:**
+| Name  | Salary | SalaryCategory |
+|------|--------|---------------|
+| John  | 5000   | Medium        |
+| Alice | 8000   | Medium        |
+| Bob   | 12000  | High          |
+| Eve   | 3000   | Low           |
+
+---
+
+### **Example 2: Using CASE in ORDER BY**
+If you want to sort employees by salary category, you can use `CASE` inside `ORDER BY`:
+
+```sql
+SELECT Name, Salary
+FROM Employees
+ORDER BY 
+    CASE 
+        WHEN Salary < 5000 THEN 1
+        WHEN Salary BETWEEN 5000 AND 10000 THEN 2
+        ELSE 3
+    END;
+```
+This will order the results as:
+1. Low salary first (`<5000`).
+2. Medium salary (`5000-10000`).
+3. High salary (`>10000`).
+
+---
+
+### **Example 3: Using CASE in Aggregation**
+You can use `CASE` inside aggregate functions:
+
+```sql
+SELECT 
+    COUNT(CASE WHEN Salary < 5000 THEN 1 END) AS LowIncomeEmployees,
+    COUNT(CASE WHEN Salary BETWEEN 5000 AND 10000 THEN 1 END) AS MediumIncomeEmployees,
+    COUNT(CASE WHEN Salary > 10000 THEN 1 END) AS HighIncomeEmployees
+FROM Employees;
+```
+
+#### **Output:**
+| LowIncomeEmployees | MediumIncomeEmployees | HighIncomeEmployees |
+|--------------------|----------------------|---------------------|
+| 1                 | 2                     | 1                   |
+
+---
+
+### **Key Takeaways**
+✅ `CASE` is useful for conditional logic in SQL.  
+✅ It can be used in `SELECT`, `WHERE`, `ORDER BY`, and even aggregate functions.  
+✅ Always use `END` to close the `CASE` statement.  
+✅ The `ELSE` part is optional but recommended to avoid `NULL` values.
