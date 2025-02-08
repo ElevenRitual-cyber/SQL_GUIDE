@@ -659,3 +659,81 @@ FROM Products;
 ✅ Evaluates **left to right** and stops once it finds a non-NULL value.  
 ✅ If **all values are NULL**, it returns `NULL` (or a default value if provided).  
 ✅ Works in `SELECT`, `WHERE`, `ORDER BY`, and other SQL clauses.
+
+
+## 7. Over and Partition Clauses:
+---
+
+## OVER Clause
+
+- **Definition:**  
+  The `OVER` clause is used with window functions to define the set of rows (the "window") that the function should operate on. Unlike aggregate functions combined with `GROUP BY`, window functions with `OVER` retain the individual rows of the result set while performing calculations across a set of rows.
+
+- **Example Without PARTITION BY:**  
+  Imagine you want to calculate a running total of sales over time.
+
+  ```sql
+  SELECT 
+      sale_date,
+      sale_amount,
+      SUM(sale_amount) OVER (ORDER BY sale_date) AS running_total
+  FROM sales;
+  ```
+  **Explanation:**  
+  - `SUM(sale_amount)` is the window function.
+  - `OVER (ORDER BY sale_date)` tells SQL to calculate the cumulative sum ordered by `sale_date`.  
+  - The result includes every row from the `sales` table, with an extra column showing the running total.
+
+---
+
+## PARTITION BY Clause
+
+- **Definition:**  
+  The `PARTITION BY` clause is an option within the `OVER` clause that divides the result set into partitions (or groups) based on one or more columns. The window function is then applied independently to each partition.
+
+- **Example With PARTITION BY:**  
+  Suppose you want to calculate the average salary for employees within each department without collapsing the rows into a single summary row per department.
+
+  ```sql
+  SELECT 
+      department,
+      employee_name,
+      salary,
+      AVG(salary) OVER (PARTITION BY department) AS avg_salary_by_dept
+  FROM employees;
+  ```
+  **Explanation:**  
+  - `AVG(salary)` is the window function.
+  - `OVER (PARTITION BY department)` tells SQL to calculate the average salary separately for each `department`.
+  - Every row still appears in the final result, but each row now has an additional column showing the average salary for its department.
+
+---
+
+## Combined Example: PARTITION BY with ORDER BY
+
+You can also combine `PARTITION BY` and `ORDER BY` within the `OVER` clause. For instance, if you want to rank employees within each department based on their salary:
+
+```sql
+SELECT 
+    department,
+    employee_name,
+    salary,
+    RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS salary_rank
+FROM employees;
+```
+
+**Explanation:**  
+- `RANK()` is the window function that assigns a rank to each row.
+- `PARTITION BY department` divides the dataset into groups by department.
+- `ORDER BY salary DESC` orders employees within each department by their salary in descending order.
+- Each employee gets a rank relative to others in the same department.
+
+---
+
+## Summary
+
+- **OVER:** Specifies the window (set of rows) over which a window function operates.
+- **PARTITION BY:** An option inside the `OVER` clause that divides the result set into partitions, so that the window function is applied to each partition independently.
+- **ORDER BY within OVER:** Further defines the order of rows within each partition, which is useful for functions that depend on order (like ranking or cumulative sums).
+
+These tools allow you to perform complex calculations over subsets of your data while still retaining row-level details in your result set.
