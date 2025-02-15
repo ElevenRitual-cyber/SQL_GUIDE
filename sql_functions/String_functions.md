@@ -78,7 +78,7 @@
 ## Note: In sql indexing starts from 1 instead of 0.
 
 ## How some functions works?
-### **How `CONCAT_WS()` Works Internally in SQL**
+### 1.**How `CONCAT_WS()` Works Internally in SQL**
 The `CONCAT_WS()` function in SQL **concatenates multiple values** into a **single string**, using a **specified separator**. It works as follows:
 
 ---
@@ -164,4 +164,31 @@ SELECT CONCAT('A', NULL, 'B');         -- Output: NULL
 ✔️ **When you need a separator** (like `,`, `-`, `|`, etc.).  
 ✔️ **When handling NULL values gracefully** (without breaking the string).  
 ✔️ **For formatted outputs** (like dates, full names, addresses).  
+
+Yes, exactly! 🚀  
+
+- **`TRIM()`** → Removes whitespace (or specified characters) **from both sides**.  
+- **`LTRIM()`** → Removes whitespace (or specified characters) **only from the left side**.  
+- **`RTRIM()`** → Removes whitespace (or specified characters) **only from the right side**.  
+
+### **Example Recap:**
+```sql
+SELECT TRIM('  Hello World  ');  -- 'Hello World'
+SELECT LTRIM('  Hello World  '); -- 'Hello World  '
+SELECT RTRIM('  Hello World  '); -- '  Hello World'
+```
+
+# 2. how trim() works?
+
+
+- **`TRIM()`** → Removes whitespace (or specified characters) **from both sides**.  
+- **`LTRIM()`** → Removes whitespace (or specified characters) **only from the left side**.  
+- **`RTRIM()`** → Removes whitespace (or specified characters) **only from the right side**.  
+
+### **Example Recap:**
+```sql
+SELECT TRIM('  Hello World  ');  -- 'Hello World'
+SELECT LTRIM('  Hello World  '); -- 'Hello World  '
+SELECT RTRIM('  Hello World  '); -- '  Hello World'
+```
 
