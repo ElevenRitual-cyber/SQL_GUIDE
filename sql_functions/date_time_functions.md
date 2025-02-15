@@ -153,3 +153,46 @@ SELECT * FROM Orders;
 ## **4. Summary**
 - Use **`DATETIME`** if you **don't want automatic updates** and **don't care about time zones**.
 - Use **`TIMESTAMP`** if you need **automatic updates** or need to **store time zone-aware data**.
+
+# 2. **Q: What is the difference between using `DATETIME DEFAULT NOW()` and `TIMESTAMP DEFAULT CURRENT_TIMESTAMP` in MySQL? When should I use each?**  
+
+#### **1️⃣ `DATETIME DEFAULT NOW()`**  
+```sql
+CREATE TABLE orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    timings DATETIME DEFAULT NOW()
+);
+```
+- ✅ Stores a **fixed** timestamp (`YYYY-MM-DD HH:MM:SS`).
+- ✅ **Does NOT update automatically** when the row is modified.
+- ✅ **No time zone conversion**; it stores the exact value inserted.
+- ❌ **Larger storage size** (8 bytes in MySQL).
+
+---
+
+#### **2️⃣ `TIMESTAMP DEFAULT CURRENT_TIMESTAMP`**  
+```sql
+CREATE TABLE orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    timings TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+- ✅ **Automatically inserts the current timestamp** when a new row is created.
+- ✅ **Can auto-update on row modification** if defined as:
+  ```sql
+  timings TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  ```
+- ✅ **Time zone aware**; stored values can adjust based on session time zone settings.
+- ✅ **Smaller storage size** (4 bytes in MySQL).
+- ❌ **Limited date range** (`1970-01-01` to `2038-01-19` in MySQL).
+
+---
+
+### **📌 Key Differences:**
+| Feature         | `DATETIME` | `TIMESTAMP` |
+|---------------|------------|-------------|
+| **Storage Size** | 8 bytes | 4 bytes |
+| **Time Zone Aware** | ❌ No | ✅ Yes |
+| **Auto-Update on Row Change** | ❌ No | ✅ Yes (if defined with `ON UPDATE CURRENT_TIMESTAMP`) |
+| **Date Range** | `1000-01-01` to `9999-12-31` | `1970-01-01` to `2038-01-19` |
+| **Best Use Case** | Storing fixed timestamps (e.g., order creation time) | Logging system events, tracking last modified times |
