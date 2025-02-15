@@ -73,3 +73,95 @@
 | **Search Functions** | `LOCATE()`, `POSITION()`, `INSTR()` |
 | **Modification & Trimming** | `REPLACE()`, `TRIM()`, `LTRIM()`, `RTRIM()` |
 | **Pattern Matching** | `LIKE`, `REGEXP` |
+
+
+## Note: In sql indexing starts from 1 instead of 0.
+
+## How some functions works?
+### **How `CONCAT_WS()` Works Internally in SQL**
+The `CONCAT_WS()` function in SQL **concatenates multiple values** into a **single string**, using a **specified separator**. It works as follows:
+
+---
+
+### **🔹 Step-by-Step Working Mechanism**
+1. **Takes the separator** as the **first argument**.
+2. **Processes each subsequent argument** (string/column values).
+3. **Concatenates them** with the given separator.
+4. **Ignores `NULL` values** (does not insert extra separators for them).
+5. **Returns the final concatenated string**.
+
+---
+
+### **🔹 Example 1: Basic Concatenation**
+```sql
+SELECT CONCAT_WS('-', '2025', '02', '15');
+```
+✅ **Output:**  
+```
+2025-02-15
+```
+**How it works:**  
+- The separator (`'-'`) is applied between `'2025'`, `'02'`, and `'15'`.
+- The final result is `"2025-02-15"`.
+
+---
+
+### **🔹 Example 2: Handling `NULL` Values**
+```sql
+SELECT CONCAT_WS('-', '2025', NULL, '15');
+```
+✅ **Output:**  
+```
+2025-15
+```
+**How it works:**  
+- `'2025'` and `'15'` are concatenated.
+- The `NULL` value is **ignored** (no extra `'-'` appears).
+- The result is `"2025-15"`.
+
+---
+
+### **🔹 Example 3: Using Columns**
+Imagine a `customers` table with `firstName` and `lastName` columns:
+| firstName | lastName  |
+|-----------|----------|
+| John      | Doe      |
+| Alice     | NULL     |
+| Bob       | Smith    |
+
+```sql
+SELECT CONCAT_WS(' ', firstName, lastName) AS FullName FROM customers;
+```
+✅ **Output:**
+```
+John Doe
+Alice
+Bob Smith
+```
+**How it works:**  
+- **John + Doe → "John Doe"**
+- **Alice + NULL → "Alice"** (NULL is ignored)
+- **Bob + Smith → "Bob Smith"**
+
+---
+
+### **🔹 Key Differences Between `CONCAT_WS()` and `CONCAT()`**
+| Feature      | `CONCAT_WS()`      | `CONCAT()`  |
+|-------------|--------------------|------------|
+| Separator   | User-defined        | No separator |
+| `NULL` handling | **Ignores NULLs** | Returns NULL |
+| Use Case    | **Joins with separators** | **Simple merging** |
+
+✅ **Example Difference**
+```sql
+SELECT CONCAT_WS('-', 'A', NULL, 'B'); -- Output: "A-B"
+SELECT CONCAT('A', NULL, 'B');         -- Output: NULL
+```
+
+---
+
+### **🔹 When to Use `CONCAT_WS()`?**
+✔️ **When you need a separator** (like `,`, `-`, `|`, etc.).  
+✔️ **When handling NULL values gracefully** (without breaking the string).  
+✔️ **For formatted outputs** (like dates, full names, addresses).  
+
