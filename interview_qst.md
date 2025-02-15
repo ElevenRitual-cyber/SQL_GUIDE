@@ -91,5 +91,5 @@ SELECT name FROM Customer WHERE referee_id != 2 OR referee_id IS NULL;
 ✅ **Replaced** `referee_id = NULL` with `referee_id IS NULL`.  
 ✅ **Keeps records** where `referee_id` is either **not 2** or **NULL**.  
 
-Let me know if you need further clarification! 🚀
+
 
