@@ -196,3 +196,139 @@ CREATE TABLE orders (
 | **Auto-Update on Row Change** | ❌ No | ✅ Yes (if defined with `ON UPDATE CURRENT_TIMESTAMP`) |
 | **Date Range** | `1000-01-01` to `9999-12-31` | `1970-01-01` to `2038-01-19` |
 | **Best Use Case** | Storing fixed timestamps (e.g., order creation time) | Logging system events, tracking last modified times |
+
+
+### **SQL Date Functions**  
+
+SQL provides various **date functions** to manipulate and retrieve date and time values. Here’s a list of commonly used date functions across different databases like MySQL, SQL Server, PostgreSQL, and Oracle.
+
+---
+
+### **1. Current Date & Time Functions**  
+These functions return the current system date and time.
+
+| Function | Description | Supported Databases |
+|----------|------------|--------------------|
+| `CURRENT_DATE` | Returns the current date without time. | MySQL, PostgreSQL, SQL Server, Oracle |
+| `CURRENT_TIME` | Returns the current time without date. | MySQL, PostgreSQL, SQL Server, Oracle |
+| `CURRENT_TIMESTAMP` | Returns the current date and time (timestamp). | MySQL, PostgreSQL, SQL Server, Oracle |
+| `NOW()` | Returns the current date and time. | MySQL, PostgreSQL |
+| `SYSDATE` | Returns the system’s current date and time. | Oracle, MySQL |
+| `GETDATE()` | Returns the current date and time. | SQL Server |
+| `GETUTCDATE()` | Returns the current UTC date and time. | SQL Server |
+
+---
+
+### **2. Extracting Date Parts**  
+These functions retrieve specific parts of a date.
+
+| Function | Description | Supported Databases |
+|----------|------------|--------------------|
+| `YEAR(date)` | Extracts the year from a date. | MySQL, SQL Server |
+| `MONTH(date)` | Extracts the month from a date. | MySQL, SQL Server |
+| `DAY(date)` | Extracts the day from a date. | MySQL, SQL Server |
+| `HOUR(time)` | Extracts the hour from a time. | MySQL |
+| `MINUTE(time)` | Extracts the minute from a time. | MySQL |
+| `SECOND(time)` | Extracts the second from a time. | MySQL |
+| `EXTRACT(part FROM date)` | Extracts a specific part (year, month, day, etc.). | PostgreSQL, MySQL |
+| `DATEPART(part, date)` | Extracts a specific part from a date. | SQL Server |
+
+**Example:**  
+```sql
+SELECT YEAR(NOW()), MONTH(NOW()), DAY(NOW()); -- MySQL
+SELECT EXTRACT(YEAR FROM CURRENT_DATE); -- PostgreSQL
+```
+
+---
+
+### **3. Date Arithmetic (Add & Subtract)**  
+These functions add or subtract intervals from a date.
+
+| Function | Description | Supported Databases |
+|----------|------------|--------------------|
+| `DATE_ADD(date, INTERVAL value unit)` | Adds a specific time interval to a date. | MySQL |
+| `DATE_SUB(date, INTERVAL value unit)` | Subtracts a specific time interval from a date. | MySQL |
+| `DATEADD(part, value, date)` | Adds a specific time unit to a date. | SQL Server |
+| `DATESUB(part, value, date)` | Subtracts a specific time unit from a date. | SQL Server |
+| `ADD_MONTHS(date, n)` | Adds `n` months to a date. | Oracle, PostgreSQL |
+
+**Example:**  
+```sql
+SELECT DATE_ADD('2024-02-15', INTERVAL 7 DAY); -- MySQL
+SELECT DATEADD(DAY, 7, '2024-02-15'); -- SQL Server
+SELECT ADD_MONTHS(SYSDATE, 2) FROM dual; -- Oracle
+```
+
+---
+
+### **4. Date Difference Functions**  
+These functions return the difference between two dates.
+
+| Function | Description | Supported Databases |
+|----------|------------|--------------------|
+| `DATEDIFF(date1, date2)` | Returns the difference in days. | MySQL, SQL Server |
+| `TIMESTAMPDIFF(unit, date1, date2)` | Returns the difference between two timestamps. | MySQL |
+| `AGE(date1, date2)` | Returns the age difference between two dates. | PostgreSQL |
+
+**Example:**  
+```sql
+SELECT DATEDIFF('2024-12-31', '2024-02-15'); -- MySQL, SQL Server
+SELECT AGE('2024-12-31', '2024-02-15'); -- PostgreSQL
+```
+
+---
+
+### **5. Formatting Dates**  
+These functions format a date in a specific pattern.
+
+| Function | Description | Supported Databases |
+|----------|------------|--------------------|
+| `DATE_FORMAT(date, format)` | Formats a date with a specific pattern. | MySQL |
+| `TO_CHAR(date, format)` | Converts a date to a formatted string. | Oracle, PostgreSQL |
+| `FORMAT(date, format)` | Formats a date in SQL Server. | SQL Server |
+
+**Example:**  
+```sql
+SELECT DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'); -- MySQL
+SELECT TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS') FROM dual; -- Oracle
+```
+
+---
+
+### **6. Miscellaneous Date Functions**  
+
+| Function | Description | Supported Databases |
+|----------|------------|--------------------|
+| `LAST_DAY(date)` | Returns the last day of the month. | Oracle, MySQL |
+| `DAYNAME(date)` | Returns the name of the weekday. | MySQL |
+| `DAYOFWEEK(date)` | Returns the day of the week (1-7). | MySQL |
+| `WEEK(date)` | Returns the week number of the year. | MySQL |
+| `EOMONTH(date)` | Returns the last day of the month. | SQL Server |
+
+**Example:**  
+```sql
+SELECT LAST_DAY(NOW()); -- MySQL
+SELECT EOMONTH(GETDATE()); -- SQL Server
+```
+
+---
+
+### **Example Queries**
+#### **Get the Current Date and Time**
+```sql
+SELECT NOW(); -- MySQL, PostgreSQL
+SELECT SYSDATE; -- Oracle
+SELECT GETDATE(); -- SQL Server
+```
+
+#### **Find the Difference Between Two Dates**
+```sql
+SELECT DATEDIFF('2024-12-31', '2024-02-15'); -- MySQL, SQL Server
+SELECT AGE('2024-12-31', '2024-02-15'); -- PostgreSQL
+```
+
+#### **Extracting Year, Month, and Day**
+```sql
+SELECT YEAR(NOW()), MONTH(NOW()), DAY(NOW()); -- MySQL
+SELECT EXTRACT(YEAR FROM CURRENT_DATE); -- PostgreSQL
+```
