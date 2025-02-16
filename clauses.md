@@ -737,3 +737,75 @@ FROM employees;
 - **ORDER BY within OVER:** Further defines the order of rows within each partition, which is useful for functions that depend on order (like ranking or cumulative sums).
 
 These tools allow you to perform complex calculations over subsets of your data while still retaining row-level details in your result set.
+
+# 8.**`ALTER TABLE` in SQL**
+The `ALTER TABLE` statement in SQL is used to **modify an existing table** structure. It allows you to:  
+
+1. **Add a new column**  
+2. **Modify an existing column** (e.g., change data type)  
+3. **Drop a column**  
+4. **Rename a column or table**  
+5. **Add or drop constraints** (e.g., `PRIMARY KEY`, `FOREIGN KEY`, `UNIQUE`, etc.)
+
+---
+
+### **1️⃣ Add a New Column**
+```sql
+ALTER TABLE employees ADD age INT;
+```
+✅ Adds a new column `age` of type `INT` to the `employees` table.
+
+---
+
+### **2️⃣ Modify an Existing Column**
+```sql
+ALTER TABLE employees MODIFY age BIGINT;
+```
+✅ Changes the `age` column type from `INT` to `BIGINT`.
+
+---
+
+### **3️⃣ Drop a Column**
+```sql
+ALTER TABLE employees DROP COLUMN age;
+```
+✅ Removes the `age` column from the `employees` table.
+
+---
+
+### **4️⃣ Rename a Column**
+```sql
+ALTER TABLE employees RENAME COLUMN age TO employee_age;
+```
+✅ Renames column `age` to `employee_age`.
+
+---
+
+### **5️⃣ Rename the Table**
+```sql
+ALTER TABLE employees RENAME TO staff;
+```
+✅ Renames the table `employees` to `staff`.
+
+---
+
+### **6️⃣ Add a Constraint (Example: Adding a Unique Constraint)**
+```sql
+ALTER TABLE employees ADD CONSTRAINT unique_email UNIQUE (email);
+```
+✅ Ensures that all values in the `email` column are unique.
+
+---
+
+### **7️⃣ Drop a Constraint**
+```sql
+ALTER TABLE employees DROP CONSTRAINT unique_email;
+```
+✅ Removes the `unique_email` constraint.
+
+---
+
+### **🔹 Summary**
+- `ALTER TABLE` **modifies** an existing table.  
+- You can **add, modify, rename, or drop** columns and constraints.  
+- Use `ALTER TABLE` to **rename tables and modify constraints**.  
