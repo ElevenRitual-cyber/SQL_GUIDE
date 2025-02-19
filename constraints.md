@@ -385,3 +385,79 @@ ALTER TABLE Employees DROP PRIMARY KEY;
 
 ### **Conclusion**
 A **PRIMARY KEY** is essential for **data integrity and efficient lookups** in relational databases. It ensures that **every record is uniquely identifiable**, preventing duplicate or missing values. 🚀
+
+### 5.**Foreign Key Constraint in SQL** 🔑  
+
+A **Foreign Key** is a constraint in SQL that **establishes a relationship** between two tables. It ensures that the values in a column of one table **must exist** in a column of another table, maintaining **referential integrity**.  
+**In a foreign key relationship, the Foreign Key is the column in the child table that references the Primary Key of the parent table.**
+
+---
+
+### **🔹 Key Points of Foreign Key Constraint**
+✅ **Links Two Tables** – A column in one table references a **Primary Key** in another table.  
+✅ **Ensures Data Integrity** – Prevents orphan records by ensuring referenced values exist.  
+✅ **Cascading Operations** – Supports `ON DELETE CASCADE` and `ON UPDATE CASCADE`.  
+
+---
+
+### **🔹 Example: Foreign Key in SQL**
+#### **1️⃣ Creating Tables with a Foreign Key**
+```sql
+CREATE TABLE Customers (
+    customer_id INT PRIMARY KEY,
+    name VARCHAR(100)
+);
+
+CREATE TABLE Orders (
+    order_id INT PRIMARY KEY,
+    customer_id INT,
+    order_date DATE,
+    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
+);
+```
+📌 *Here, `Orders.customer_id` must exist in `Customers.customer_id`.*  
+📌In this case:
+
+Customers.customer_id → Primary Key (in the parent table)
+Orders.customer_id → Foreign Key (in the child table, referencing Customers.customer_id)
+The Foreign Key (customer_id in Orders) ensures that every value it holds must exist in the Customers.customer_id column.
+
+---
+
+### **🔹 Foreign Key with Cascade Options**
+#### **2️⃣ ON DELETE CASCADE**  
+Automatically deletes related rows in the child table when the referenced row in the parent table is deleted.
+```sql
+CREATE TABLE Orders (
+    order_id INT PRIMARY KEY,
+    customer_id INT,
+    order_date DATE,
+    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id) ON DELETE CASCADE
+);
+```
+
+#### **3️⃣ ON UPDATE CASCADE**  
+Updates child table records when the referenced key in the parent table changes.
+```sql
+FOREIGN KEY (customer_id) REFERENCES Customers(customer_id) ON UPDATE CASCADE
+```
+
+---
+
+### **🔹 Inserting & Violating Foreign Key**
+```sql
+INSERT INTO Customers VALUES (1, 'Alice');
+INSERT INTO Orders VALUES (101, 1, '2024-02-19');  -- ✅ Works
+
+INSERT INTO Orders VALUES (102, 5, '2024-02-19');  -- ❌ ERROR! No customer_id = 5
+```
+📌 *SQL rejects inserting `customer_id = 5` since it does not exist in `Customers`.*
+
+---
+
+### **🔹 Why Use Foreign Keys?**
+✔ Prevents **inconsistent** data  
+✔ Ensures **referential integrity**  
+✔ Enables **structured** relationships  
+
+
