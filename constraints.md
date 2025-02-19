@@ -598,3 +598,79 @@ DELETE FROM Customers WHERE customer_id = 1;  -- ❌ Error if referenced in Orde
 ✔ Use `SET NULL` if child records should **remain but lose reference**.  
 ✔ Use `RESTRICT` or `NO ACTION` if deletion or update **should not be allowed**.  
 
+### **How `RESTRICT` Cascading Works in MySQL**  
+
+`RESTRICT` is an **ON DELETE** and **ON UPDATE** action used in foreign key constraints. It prevents deletion or updating of a referenced row **if dependent rows exist in the child table**.
+
+---
+
+### **✅ How `RESTRICT` Works in Foreign Keys**
+When defining a foreign key, you can specify `RESTRICT` like this:
+```sql
+ALTER TABLE Orders 
+ADD CONSTRAINT fk_orders_customers 
+FOREIGN KEY (cust_id) REFERENCES Customers(id) 
+ON DELETE RESTRICT 
+ON UPDATE RESTRICT;
+```
+
+#### **🚀 Behavior of `RESTRICT`**
+1. **ON DELETE RESTRICT**  
+   - If you **try to delete** a row in `Customers` that is referenced by `Orders`, MySQL **prevents** the deletion.
+   - Example:
+     ```sql
+     DELETE FROM Customers WHERE id = 101;
+     ```
+     ❌ **Error:** Cannot delete because `Orders` has rows referencing `Customers(101)`.
+
+2. **ON UPDATE RESTRICT**  
+   - If you **try to update** the `id` in `Customers`, MySQL **blocks** the update if it's referenced by `Orders`.
+   - Example:
+     ```sql
+     UPDATE Customers SET id = 200 WHERE id = 101;
+     ```
+     ❌ **Error:** Cannot update `id = 101` because it is referenced in `Orders`.
+
+---
+
+### **🔹 When to Use `RESTRICT`?**
+- Use `RESTRICT` when you **want to prevent accidental deletions or updates** that would leave orphaned records in related tables.
+- It's the **default behavior** if no action is specified.
+
+---
+
+### **🚀 Comparison with Other Cascading Options**
+| Option            | ON DELETE Behavior | ON UPDATE Behavior |
+|------------------|-------------------|-------------------|
+| **RESTRICT** (default) | Prevents deletion if referenced | Prevents update if referenced |
+| **CASCADE** | Deletes child rows when parent is deleted | Updates child rows when parent is updated |
+| **SET NULL** | Sets foreign key to `NULL` if parent is deleted | Sets foreign key to `NULL` if parent is updated |
+| **NO ACTION** | Similar to `RESTRICT` but checks constraints at the end of the transaction |
+
+---
+
+### **✅ Example to Test `RESTRICT`**
+```sql
+CREATE TABLE Customers (
+    id INT PRIMARY KEY,
+    name VARCHAR(50)
+);
+
+CREATE TABLE Orders (
+    oid INT PRIMARY KEY,
+    cust_id INT,
+    FOREIGN KEY (cust_id) REFERENCES Customers(id) ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
+-- Insert Data
+INSERT INTO Customers (id, name) VALUES (101, 'Alice');
+INSERT INTO Orders (oid, cust_id) VALUES (1, 101);
+
+-- Try Deleting (Will FAIL)
+DELETE FROM Customers WHERE id = 101; -- ❌ ERROR
+
+-- Try Updating (Will FAIL)
+UPDATE Customers SET id = 200 WHERE id = 101; -- ❌ ERROR
+```
+
+
