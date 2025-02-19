@@ -460,4 +460,141 @@ INSERT INTO Orders VALUES (102, 5, '2024-02-19');  -- ❌ ERROR! No customer_id 
 ✔ Ensures **referential integrity**  
 ✔ Enables **structured** relationships  
 
+#### ### **What is Referential Integrity?** 🔗  
+
+**Referential Integrity** is a **database concept** that ensures relationships between tables remain **consistent** by enforcing rules on **foreign keys**. It prevents **orphaned records** and maintains **data accuracy**.  
+
+---
+
+### **🔹 How Referential Integrity Works**  
+1️⃣ A **Foreign Key** in a child table must refer to a **valid** Primary Key in the parent table.  
+2️⃣ If a referenced row is deleted or updated, rules like `CASCADE`, `SET NULL`, or `RESTRICT` define what happens.  
+3️⃣ Prevents inserting invalid foreign key values that do not exist in the parent table.  
+
+---
+
+### **🔹 Example: Maintaining Referential Integrity**
+```sql
+CREATE TABLE Customers (
+    customer_id INT PRIMARY KEY,
+    name VARCHAR(100)
+);
+
+CREATE TABLE Orders (
+    order_id INT PRIMARY KEY,
+    customer_id INT,
+    order_date DATE,
+    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id) ON DELETE CASCADE
+);
+```
+
+#### ✅ **Valid Operations**  
+```sql
+INSERT INTO Customers VALUES (1, 'Alice');
+INSERT INTO Orders VALUES (101, 1, '2024-02-19');  -- ✅ Allowed (customer_id 1 exists)
+```
+
+#### ❌ **Invalid Operations (Prevented by Referential Integrity)**
+```sql
+INSERT INTO Orders VALUES (102, 5, '2024-02-19');  -- ❌ ERROR! (No customer_id = 5)
+
+DELETE FROM Customers WHERE customer_id = 1;  -- ✅ Deletes customer & their orders (CASCADE)
+```
+
+---
+
+### **🔹 Why Is Referential Integrity Important?**  
+✔ Prevents **orphan records** (e.g., an order referencing a non-existent customer)  
+✔ Ensures **data consistency** across related tables  
+✔ Supports **data accuracy** by preventing invalid references  
+
+### **Cascading Rules in SQL** 🔄  
+
+Cascading rules define how **changes in the parent table** affect related rows in the **child table** when using **Foreign Keys**. These rules ensure **referential integrity** by handling `DELETE` and `UPDATE` operations.
+
+---
+
+### **🔹 Types of Cascading Rules**  
+
+#### **1️⃣ ON DELETE CASCADE & ON UPDATE CASCADE** 🔥  
+📌 **Effect:** When a row in the parent table is **deleted** or **updated**, all matching rows in the child table are also **deleted** or **updated** automatically.  
+
+```sql
+CREATE TABLE Customers (
+    customer_id INT PRIMARY KEY
+);
+
+CREATE TABLE Orders (
+    order_id INT PRIMARY KEY,
+    customer_id INT,
+    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+```
+✅ **Example:**  
+```sql
+DELETE FROM Customers WHERE customer_id = 1;  -- Deletes all orders with customer_id = 1
+UPDATE Customers SET customer_id = 5 WHERE customer_id = 1;  -- Updates customer_id in Orders too
+```
+
+---
+
+#### **2️⃣ ON DELETE SET NULL & ON UPDATE SET NULL** ⚠️  
+📌 **Effect:** When a parent record is **deleted** or **updated**, the foreign key column in the child table is set to `NULL`.  
+⚠️ Requires the foreign key column in the child table to allow `NULL` values.
+
+```sql
+CREATE TABLE Orders (
+    order_id INT PRIMARY KEY,
+    customer_id INT,
+    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id) ON DELETE SET NULL
+);
+```
+✅ **Example:**  
+```sql
+DELETE FROM Customers WHERE customer_id = 1;  -- Orders with customer_id = 1 now have NULL
+```
+
+---
+
+#### **3️⃣ ON DELETE RESTRICT & ON UPDATE RESTRICT** 🚫  
+📌 **Effect:** Prevents deletion or updating of the parent record **if child records exist**.  
+💡 This is the default behavior if no cascading rule is specified.
+
+```sql
+FOREIGN KEY (customer_id) REFERENCES Customers(customer_id) ON DELETE RESTRICT
+```
+❌ **Example:**  
+```sql
+DELETE FROM Customers WHERE customer_id = 1;  -- ERROR! Orders exist with this customer_id
+```
+
+---
+
+#### **4️⃣ ON DELETE NO ACTION & ON UPDATE NO ACTION** ⏸  
+📌 **Effect:** Similar to `RESTRICT`, but enforcement is deferred until the end of the transaction.
+
+```sql
+FOREIGN KEY (customer_id) REFERENCES Customers(customer_id) ON DELETE NO ACTION
+```
+🚫 **Example:**  
+```sql
+DELETE FROM Customers WHERE customer_id = 1;  -- ❌ Error if referenced in Orders
+```
+
+---
+
+### **🔹 Summary Table**
+| Rule                 | DELETE Effect                          | UPDATE Effect                          |
+|----------------------|--------------------------------------|--------------------------------------|
+| **CASCADE**         | Deletes matching rows in the child   | Updates matching foreign keys       |
+| **SET NULL**        | Sets foreign key to `NULL`           | Sets foreign key to `NULL`          |
+| **RESTRICT**        | Prevents deletion if referenced      | Prevents update if referenced      |
+| **NO ACTION**       | Like `RESTRICT`, but enforced later  | Like `RESTRICT`, but deferred       |
+
+---
+
+### **🔹 Choosing the Right Rule**
+✔ Use `CASCADE` when child data **must be removed** with the parent.  
+✔ Use `SET NULL` if child records should **remain but lose reference**.  
+✔ Use `RESTRICT` or `NO ACTION` if deletion or update **should not be allowed**.  
 
