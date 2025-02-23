@@ -91,5 +91,97 @@ SELECT name FROM Customer WHERE referee_id != 2 OR referee_id IS NULL;
 ✅ **Replaced** `referee_id = NULL` with `referee_id IS NULL`.  
 ✅ **Keeps records** where `referee_id` is either **not 2** or **NULL**.  
 
+### 5.**Why Do We Need Sorting on Multiple Columns in SQL?**
+Sorting on multiple columns is necessary when we want **more control over how data is ordered**, especially when values in one column are not unique. It helps in:
+
+1. **Breaking Ties**  
+   - When multiple rows have the same value in a column, sorting by another column helps rank them properly.  
+   - Example: Sorting students by **score (descending)** and then by **name (ascending)** in case of ties.
+
+2. **Improving Readability & Analysis**  
+   - Organizing data logically makes it easier to analyze.  
+   - Example: Sorting employees by **department (A-Z)** and then by **salary (high to low)**.
+
+3. **Optimizing Queries for Reports & Dashboards**  
+   - Reports often require hierarchical sorting.  
+   - Example: Sorting **orders by date (latest first)** and then **by order time (earliest first)**.
+
+4. **Ensuring Consistency in Data Presentation**  
+   - When data is fetched dynamically, sorting ensures **consistent order**.  
+   - Example: Sorting **transactions by user_id** and then **by transaction amount**.
+
+---
+
+### **How Sorting on Multiple Columns Works**
+The `ORDER BY` clause allows **sorting on multiple columns** by listing them in order of priority:
+
+```sql
+SELECT * FROM table_name
+ORDER BY column1 ASC|DESC, column2 ASC|DESC, column3 ASC|DESC;
+```
+
+- The sorting happens **first** on `column1`.  
+- If there are duplicate values in `column1`, the sorting **next happens** on `column2`.  
+- If `column2` also has duplicates, sorting moves to `column3`, and so on.
+
+---
+
+### **Examples & Use Cases**
+
+#### **1️⃣ Sorting Students by Score (Descending) & Name (Alphabetically)**
+```sql
+SELECT Name, Score 
+FROM Students
+ORDER BY Score DESC, Name ASC;
+```
+✅ **Why?**  
+- If two students have the same score, sorting by **name (A-Z)** ensures a clear ranking.
+
+---
+
+#### **2️⃣ Sorting Employees by Department (A-Z) & Salary (High to Low)**
+```sql
+SELECT Name, Department, Salary
+FROM Employees
+ORDER BY Department ASC, Salary DESC;
+```
+✅ **Why?**  
+- Groups employees by department.  
+- Within each department, highest salaries appear first.
+
+---
+
+#### **3️⃣ Sorting Orders by Date (Latest First) & Time (Earliest First)**
+```sql
+SELECT Order_ID, Order_Date, Order_Time
+FROM Orders
+ORDER BY Order_Date DESC, Order_Time ASC;
+```
+✅ **Why?**  
+- Ensures the most recent orders appear first.  
+- Within the same date, orders are arranged **earliest to latest**.
+
+---
+
+#### **4️⃣ Sorting Cities by Name Length (Shortest First) & Alphabetically**
+```sql
+SELECT City, LENGTH(City) AS Name_Length
+FROM Station
+ORDER BY Name_Length ASC, City ASC;
+```
+✅ **Why?**  
+- If multiple cities have the same length, they are **sorted alphabetically**.
+
+---
+
+### **Summary**
+Sorting on multiple columns:
+- **Controls data presentation** when one column alone isn't enough.
+- **Breaks ties** logically using additional criteria.
+- **Enhances data organization** for better analysis.
+- **Improves query performance** for reports.
+
+![image](https://github.com/user-attachments/assets/e5f8d519-5e71-4256-9fbc-0e72ea69a1cc)
+
 
 
