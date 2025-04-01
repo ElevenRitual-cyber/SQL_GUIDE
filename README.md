@@ -8,22 +8,22 @@ A comprehensive guide to SQL functions, commands, and best practices for databas
 ## 📚 Contents
 
 ### Core Concepts
-- [Basic Commands](basic_commands.md) - Essential SQL statements for database operations
-- [Basic Rules](basic_rules.md) - Fundamental SQL syntax and conventions
-- [Constraints](constraints.md) - Database constraints and their applications
+- Basic Commands - Essential SQL statements for database operations
+- Basic Rules - Fundamental SQL syntax and conventions
+- Constraints - Database constraints and their applications
 
 ### Query Components
-- [Clauses](clauses.md) - SQL clauses (WHERE, GROUP BY, HAVING, etc.)
-- [Operators](Operators_SQL.md) - Comparison, logical, and arithmetic operators
-- [Pattern Matching](patternMatching.md) - LIKE and REGEXP pattern matching techniques
+- Clauses - SQL clauses (WHERE, GROUP BY, HAVING, etc.)
+- Operators - Comparison, logical, and arithmetic operators
+- Pattern Matching - LIKE and REGEXP pattern matching techniques
 
 ### Advanced Topics
-- [Views](Views.md) - Creating and managing database views
-- [Delimiter Usage](delimiter.md) - Understanding delimiters in SQL
-- [DateTime Functions](date_time_functions.md) - Date and time manipulation
+- Views- Creating and managing database views
+- Delimiter Usage - Understanding delimiters in SQL
+- DateTime Functions - Date and time manipulation
 
 ### Practical Resources
-- [Interview Questions](interview_qst.md) - Common SQL interview questions and answers
+- Interview Questions - Common SQL interview questions and answers
 
 ## 🚀 Getting Started
 
